@@ -1,5 +1,6 @@
 import gifos
 
+
 # Initialize the Terminal object
 t = gifos.Terminal(
     width=800,
@@ -69,7 +70,24 @@ t.clone_frame(15)
 
 t.clear_frame()
 
+t.gen_text("Initiating Boot Sequence ", 1, contin=True)
+t.gen_typing_text(".....", 1, contin=True)
+t.gen_text("\x1b[96m", 1, count=0, contin=True)  # buffer to be removed
+t.set_font("JetBrainsMonoNerdFontMono-Regular.ttf", 66)
+os_logo_text = "BRYAN OS"
+mid_row = (t.num_rows + 1) // 2
+mid_col = (t.num_cols - len(os_logo_text) + 1) // 2
+effect_lines = gifos.effects.text_scramble_effect_lines(
+    os_logo_text, 3, include_special=False
+)
+for i in range(len(effect_lines)):
+    t.delete_row(mid_row + 1)
+    t.gen_text(effect_lines[i], mid_row + 1, mid_col + 1)
+
+t.clear_frame()
+
 # Simulate the kernel boot process
+t.set_font("JetBrainsMonoNerdFontMono-Regular.ttf", 15)
 boot_line("lulos ltd kernel.js initializing", 1)
 print_dots_done(1)
 init_line("Starting system...", 2)
@@ -93,7 +111,7 @@ t.clone_frame(15)
 
 t.clear_frame()
 t.gen_text(text="Welcome, Bryan Campuzano! Last Login: 01-01-1970T00:00:01", row_num=1)
-t.set_prompt("\x1b[35mlewisdoesstuff\x1b[39m@\x1b[32mgithub\x1b[39m:~$ ")
+t.set_prompt("\x1b[35mBryan's stuff\x1b[39m@\x1b[32mgithub\x1b[39m:~$ ")
 t.gen_prompt(2)
 t.gen_typing_text(text="ghfetch -u Bryan-Campuzano", row_num=2, contin=True, speed=0.1)
 
@@ -107,39 +125,40 @@ details_lines = f"""\x1b[96mUser Rating: \x1b[93m{gh_stats.user_rank.level}\x1b[
 """
 t.gen_text(text=details_lines, row_num=3)
 
-t.gen_prompt(9)
+t.gen_prompt(t.curr_row)
 t.gen_typing_text(
     text="cat /proc/languages | head -n 4", row_num=9, contin=True, speed=0.1
 )
 t.gen_text(text="\x1b[34mBashScript", row_num=10)
 t.gen_text(text="\x1b[32mPython", row_num=11)
-t.gen_text(text="\x1b[32mGo", row_num=12)
+t.gen_text(text="\x1b[31mGo", row_num=12)
 
-t.gen_prompt(19)
+t.gen_prompt(t.curr_row)
 t.gen_typing_text(
     text="cat /proc/CI/CD Tools | head -n 4", row_num=13, contin=True, speed=0.1
 )
 t.gen_text(text="\x1b[29mJenkins", row_num=14)
 
-t.gen_prompt(22)
+t.gen_prompt(t.curr_row)
 t.gen_typing_text(
     text="cat /proc/Config and Automation Tools | head -n 4", row_num=15, contin=True, speed=0.1
 )
 t.gen_text(text="\x1b[33mTerraform", row_num=16)
 t.gen_text(text="\x1b[31mKubernetes", row_num=17)
-t.gen_text(text="\x1b[30mDocker", row_num=18)
+t.gen_text(text="\x1b[32mDocker", row_num=18)
 
-t.gen_prompt(25)
+t.gen_prompt(t.curr_row)
 t.gen_typing_text(
     text="cat /proc/Cloud Computing Tools | head -n 4", row_num=19, contin=True, speed=0.1
 )
-t.gen_text(text="\x1b[28mGoogleCloud", row_num=20)
-t.gen_text(text="\x1b[27mAWS", row_num=21)
-t.gen_text(text="\x1b[27mAzure", row_num=22)
+t.gen_text(text="\x1b[34mGoogleCloud", row_num=20)
+t.gen_text(text="\x1b[33mAWS", row_num=21)
+t.gen_text(text="\x1b[32mAzure", row_num=22)
 
-t.gen_prompt(28)
+t.clear_frame()
+t.gen_prompt(1)
 t.gen_typing_text(
-    text='echo "thanks for stopping by!" | cowsay', row_num=23, contin=True, speed=0.3
+    text='echo "thanks for stopping by!" | cowsay', row_num=t.curr_row, contin=True, speed=0.3
 )
 cowsay_output = r"""
  _________________________ 
@@ -152,10 +171,10 @@ cowsay_output = r"""
                 ||     ||
 """
 
-t.gen_text(text=cowsay_output, row_num=24, contin=True)
-t.gen_prompt(26)
+t.gen_text(text=cowsay_output, row_num=14, contin=True)
+t.gen_prompt(t.curr_row)
 t.clone_frame(60)
-t.gen_typing_text("reboot", 26, contin=True, speed=0.1)
+t.gen_typing_text("reboot", t.curr_row, contin=True, speed=0.1)
 t.clone_frame(5)
 t.clear_frame()
 init_line("Stopping system...", 1)
